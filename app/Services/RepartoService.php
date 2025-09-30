@@ -27,7 +27,7 @@ class RepartoService
     {
         $fechaCarbon = $this->parseFecha($fecha);
 
-        return Reparto::with('ordenes')
+        return Reparto::with('ordenes.cliente')
             ->whereDate('fecha_entrega', $fechaCarbon->toDateString())
             ->get();
     }

@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Reparto;
-use App\Models\Vehiculo;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Vehiculo;
+use App\Models\Reparto;
 
 class RepartoSeeder extends Seeder
 {
@@ -17,9 +16,14 @@ class RepartoSeeder extends Seeder
         $vehiculos = Vehiculo::all();
 
         foreach ($vehiculos as $vehiculo) {
-            Reparto::factory()->count(3)->create([
-                'vehiculo_id' => $vehiculo->id,
-            ]);
+            $numRepartos = 5;
+
+            for ($i = 0; $i < $numRepartos; $i++) {
+                Reparto::factory()->create([
+                    'vehiculo_id'   => $vehiculo->id,
+                    'fecha_entrega' => now()->addDays($i + ($vehiculo->id * 10)),
+                ]);
+            }
         }
     }
 }

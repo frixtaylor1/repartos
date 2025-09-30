@@ -7,6 +7,7 @@ use App\Services\AuthService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Mockery;
+use Tests\Support\PersistedTestObjects;
 
 class AuthTest extends TestCase
 {
@@ -16,7 +17,7 @@ class AuthTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create([
+        $this->user = PersistedTestObjects::user([
             'email'     => 'test@example.com',
             'password'  => bcrypt('password123'),
         ]);

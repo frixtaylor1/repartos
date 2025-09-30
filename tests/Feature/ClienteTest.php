@@ -46,7 +46,6 @@ class ClienteTest extends TestCase
     public function test_crear_cliente_falla_sin_email()
     {
         $user = PersistedTestObjects::user();
-
         $data = [
             'codigo'       => 'C2',
             'razon_social' => 'Cliente2',

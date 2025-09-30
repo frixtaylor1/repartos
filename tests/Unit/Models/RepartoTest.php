@@ -7,6 +7,7 @@ use App\Models\Orden;
 use App\Models\Reparto;
 use App\Models\Vehiculo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
 class RepartoTest extends TestCase
@@ -32,8 +33,8 @@ class RepartoTest extends TestCase
 
     public function test_tiene_relacion_con_ordenes()
     {
-        $reparto  = Reparto::factory()->create();
-        $cliente  = Cliente::factory()->create();
+        $reparto  = PersistedTestObjects::reparto();
+        $cliente  = PersistedTestObjects::cliente();
         $orden    = Orden::factory()->create([
             'reparto_id' => $reparto->id,
             'cliente_id' => $cliente->id,
@@ -44,8 +45,8 @@ class RepartoTest extends TestCase
 
     public function test_tiene_relacion_con_vehiculo()
     {
-        $vehiculo = Vehiculo::factory()->create();
-        $reparto = Reparto::factory()->create(['vehiculo_id' => $vehiculo->id]);
+        $vehiculo = PersistedTestObjects::vehiculo();
+        $reparto = PersistedTestObjects::reparto(['vehiculo_id' => $vehiculo->id]);
 
         $this->assertInstanceOf(Vehiculo::class, $reparto->vehiculo);
         $this->assertEquals($vehiculo->id, $reparto->vehiculo->id);

@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Orden;
 use App\Models\Reparto;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
 class OrdenTest extends TestCase
@@ -14,7 +15,7 @@ class OrdenTest extends TestCase
 
     public function test_puede_crear_una_orden()
     {
-        $cliente = Cliente::factory()->create();
+        $cliente = PersistedTestObjects::cliente();
 
         $orden = Orden::create([
             'cliente_id'     => $cliente->id,
@@ -31,8 +32,8 @@ class OrdenTest extends TestCase
 
     public function test_tiene_relacion_con_cliente()
     {
-        $cliente = Cliente::factory()->create();
-        $orden = Orden::factory()->create(['cliente_id' => $cliente->id]);
+        $cliente = PersistedTestObjects::cliente();
+        $orden   = PersistedTestObjects::orden(['cliente_id' => $cliente->id]);
 
         $this->assertInstanceOf(Cliente::class, $orden->cliente);
         $this->assertEquals($cliente->id, $orden->cliente->id);
@@ -40,8 +41,8 @@ class OrdenTest extends TestCase
 
     public function test_puede_tener_un_reparto_asociado()
     {
-        $cliente = Cliente::factory()->create();
-        $reparto = Reparto::factory()->create();
+        $cliente = PersistedTestObjects::cliente();
+        $reparto = PersistedTestObjects::reparto();
 
         $orden = Orden::factory()->create([
             'cliente_id' => $cliente->id,

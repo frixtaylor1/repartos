@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('fecha_entrega');
             $table->string('estado')->default(Reparto::ESTADO_PENDIENTE);
             $table->foreignId('vehiculo_id')->constrained('vehiculos')->cascadeOnDelete();
+            $table->unique(['vehiculo_id', 'fecha_entrega']);
             $table->timestamps();
         });
     }

@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Reparto;
 use App\Models\Vehiculo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
 class VehiculoTest extends TestCase
@@ -26,8 +26,8 @@ class VehiculoTest extends TestCase
 
     public function test_tiene_relacion_con_repartos()
     {
-        $vehiculo = Vehiculo::factory()->create();
-        $reparto  = Reparto::factory()->create(['vehiculo_id' => $vehiculo->id]);
+        $vehiculo = PersistedTestObjects::vehiculo();
+        $reparto  = PersistedTestObjects::reparto(['vehiculo_id' => $vehiculo->id]);
 
         $this->assertTrue($vehiculo->repartos->contains($reparto));
     }

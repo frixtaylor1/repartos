@@ -14,7 +14,6 @@ class RepartoTest extends TestCase
     {
         $user       = PersistedTestObjects::user();
         $vehiculo   = PersistedTestObjects::vehiculo();
-
         $data = [
             'codigo_de_reparto' => 'R-101',
             'fecha_entrega'     => now()->addDay()->toDateString(),
@@ -30,7 +29,6 @@ class RepartoTest extends TestCase
                      'codigo_de_reparto' => 'R-101',
                      'vehiculo_id'       => $vehiculo->id,
                  ]);
-
         $this->assertDatabaseHas('repartos', [
             'codigo_de_reparto' => 'R-101',
             'vehiculo_id'       => $vehiculo->id,
@@ -40,7 +38,6 @@ class RepartoTest extends TestCase
     public function test_crear_reparto_falla_sin_vehiculo()
     {
         $user = PersistedTestObjects::user();
-
         $data = [
             'codigo_de_reparto' => 'R-102',
             'fecha_entrega'     => now()->addDay()->toDateString(),

@@ -5,6 +5,7 @@ namespace Tests\Unit\Models;
 use App\Models\Cliente;
 use App\Models\Orden;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
 class ClienteTest extends TestCase
@@ -25,14 +26,13 @@ class ClienteTest extends TestCase
         $this->assertDatabaseHas('clientes', [
             'email' => 'cliente@test.com',
         ]);
-
         $this->assertEquals('Mi Empresa', $cliente->razon_social);
     }
 
     public function test_tiene_relacion_con_ordenes()
     {
-        $cliente    = Cliente::factory()->create();
-        $orden      = Orden::factory()->create(['cliente_id' => $cliente->id]);
+        $cliente    = PersistedTestObjects::cliente();
+        $orden      = PersistedTestObjects::orden(['cliente_id' => $cliente->id]);
 
         $this->assertTrue($cliente->ordenes->contains($orden));
         $this->assertInstanceOf(Orden::class, $cliente->ordenes->first());

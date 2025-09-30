@@ -14,7 +14,6 @@ class OrdenTest extends TestCase
     {
         $user    = PersistedTestObjects::user();
         $cliente = PersistedTestObjects::cliente();
-
         $data = [
             'cliente_id'     => $cliente->id,
             'codigo_de_orden'=> 'ORD-001',
@@ -29,7 +28,6 @@ class OrdenTest extends TestCase
                  ->assertJsonFragment([
                      'cliente_id' => $cliente->id,
                  ]);
-
         $this->assertDatabaseHas('ordenes', [
             'cliente_id' => $cliente->id,
             'codigo_de_orden' => 'ORD-001',
@@ -39,7 +37,6 @@ class OrdenTest extends TestCase
     public function test_crear_orden_falla_sin_cliente()
     {
         $user = PersistedTestObjects::user();
-
         $data = [
             'codigo_de_orden'=> 'ORD-002',
             'direccion'      => 'Calle de prueba 123',
@@ -70,7 +67,6 @@ class OrdenTest extends TestCase
                      'id' => $orden->id,
                      'reparto_id' => $reparto->id,
                  ]);
-
         $this->assertDatabaseHas('ordenes', [
             'id' => $orden->id,
             'reparto_id' => $reparto->id,

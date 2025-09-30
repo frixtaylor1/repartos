@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Vehiculo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
 class VehiculoTest extends TestCase
@@ -13,8 +14,7 @@ class VehiculoTest extends TestCase
 
     public function test_crear_vehiculo()
     {
-        $user = User::factory()->create();
-
+        $user = PersistedTestObjects::user();
         $data = [
             'patente' => 'ABC123',
             'modelo'  => 'Ford Fiesta',
@@ -28,7 +28,6 @@ class VehiculoTest extends TestCase
                      'patente' => 'ABC123',
                      'modelo'  => 'Ford Fiesta',
                  ]);
-
         $this->assertDatabaseHas('vehiculos', [
             'patente' => 'ABC123',
             'modelo'  => 'Ford Fiesta',
@@ -37,8 +36,7 @@ class VehiculoTest extends TestCase
 
     public function test_no_puede_crear_vehiculo_sin_patente()
     {
-        $user = User::factory()->create();
-
+        $user = PersistedTestObjects::user();
         $data = [
             'modelo' => 'Toyota Corolla',
         ];
@@ -52,10 +50,8 @@ class VehiculoTest extends TestCase
 
     public function test_no_puede_crear_vehiculo_con_patente_existente()
     {
-        $user = User::factory()->create();
-
-        Vehiculo::factory()->create(['patente' => 'XYZ999']);
-
+        $user = PersistedTestObjects::user();
+        PersistedTestObjects::vehiculo(['patente' => 'XYZ999']);
         $data = [
             'patente' => 'XYZ999',
             'modelo'  => 'Honda Civic',

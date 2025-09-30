@@ -1,0 +1,18 @@
+{
+    "language_server_phpstan": {
+        "ignore": [
+            "vendor",
+            "storage",
+            "bootstrap/cache",
+            "node_modules",
+            "public"
+        ]
+    },
+    "indexer.exclude": [
+        "vendor",
+        "storage",
+        "bootstrap/cache",
+        "node_modules",
+        "public"
+    ]
+}

@@ -9,7 +9,7 @@ class Orden extends Model
 {
     use HasFactory;
     protected $table    = 'ordenes';
-    protected $fillable = ['cliente_id', 'codigo_de_orden', 'reparto_id'];
+    protected $fillable = ['cliente_id', 'fecha_creacion', 'codigo_de_orden', 'reparto_id'];
 
     public function cliente() {
         return $this->belongsTo(Cliente::class);

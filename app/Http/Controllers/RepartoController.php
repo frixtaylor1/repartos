@@ -36,14 +36,12 @@ class RepartoController extends Controller
             $repartos = $this->service->listarPorFecha($fecha);
             return response()->json($repartos);
         } catch (\Exception $exception) {
-            $user = Auth::user();
             Log::error('Error al listar por fecha', [
                 'fecha'         => $fecha,
                 'user_id'       => Auth::user()->id,
                 'error'         => $exception->getMessage(),
                 'trace'         => $exception->getTraceAsString()
             ]);
-            Log::error("Error al listar repartos por fecha | RepartoController | listarPorFechas | $user->id | " . $exception->getMessage());
             return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }

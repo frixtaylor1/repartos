@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CrearVehiculoRequest;
 use App\Services\VehiculoService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class VehiculoController extends Controller
 {
@@ -22,6 +23,6 @@ class VehiculoController extends Controller
     public function crear(CrearVehiculoRequest $request): JsonResponse
     {
         $vehiculo = $this->service->crear($request->validated());
-        return response()->json($vehiculo, 201);
+        return response()->json($vehiculo, Response::HTTP_CREATED);
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Reparto;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
@@ -25,7 +26,7 @@ class OrdenTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/ordenes', $data);
 
-        $response->assertStatus(201)
+        $response->assertStatus(Response::HTTP_CREATED)
                  ->assertJsonFragment([
                      'cliente_id' => $cliente->id,
                  ]);
@@ -48,7 +49,7 @@ class OrdenTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/ordenes', $data);
 
-        $response->assertStatus(422)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                  ->assertJsonValidationErrors(['cliente_id']);
     }
 
@@ -63,7 +64,7 @@ class OrdenTest extends TestCase
                              'reparto_id' => $reparto->id,
                          ]);
 
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonFragment([
                      'id'         => $orden->id,
                      'reparto_id' => $reparto->id,
@@ -84,7 +85,7 @@ class OrdenTest extends TestCase
                              'reparto_id' => 9999,
                          ]);
 
-        $response->assertStatus(422)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->assertJsonValidationErrors(['reparto_id']);
         $this->assertEquals(
             ['El reparto especificado no existe.'],

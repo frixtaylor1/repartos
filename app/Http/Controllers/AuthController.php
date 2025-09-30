@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -17,24 +21,44 @@ class AuthController extends Controller
      * Valida el request e intenta autenticar al usuario.
      * Devuelve un JSON con el token de acceso o un mensaje de error.
      *
-     * @param \Illuminate\Http\Request $request Request HTTP con las credenciales de login.
+     * @param LoginRequest $request
      * @return \Illuminate\Http\JsonResponse Respuesta JSON con el resultado de la autenticación.
      */
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        $this->validarLoginRequest($request);
+        $email = $request->email;
 
         try {
-            $token = $this->service->login($request->email, $request->password);
-    
+            $token = $this->service->login($email, $request->password);
+
+            Log::info('Login exitoso', [ 
+                'email'     => $email,
+                'user_id'   => Auth::id() ?? null,
+                'ip'        => $request->ip(),
+            ]);
+
             return response()->json([
                 'token' => $token,
             ]);
-        } catch(ValidationException $exception) {
-            return response()->json($exception->getMessage(), 401);
+        } catch (ValidationException $exception) {
+            Log::warning('Intento de login fallido', [
+                'email' => $email,
+                'ip'    => $request->ip(),
+                'error' => $exception->getMessage(),
+            ]);
+
+            return response()->json(['error' => $exception->getMessage()], Response::HTTP_UNAUTHORIZED);
+        } catch (\Exception $exception) {
+            Log::error('Error inesperado en login', [
+                'email' => $email,
+                'ip'    => $request->ip(),
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+            ]);
+
+            return response()->json(['error' => 'Ocurrió un error al intentar iniciar sesión'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
     /**
      * Cierra la sesión del usuario actualmente autenticado.
      *
@@ -46,13 +70,5 @@ class AuthController extends Controller
     public function logout(Request $request): void
     {
         $this->service->logout($request->user());
-    }
-
-    private function validarLoginRequest(Request $request): void
-    {
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
-        ]);
     }
 }

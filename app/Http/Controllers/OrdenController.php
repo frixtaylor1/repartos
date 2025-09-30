@@ -8,6 +8,8 @@ use App\Models\Orden;
 use App\Services\OrdenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrdenController extends Controller
 {
@@ -27,7 +29,9 @@ class OrdenController extends Controller
 
         $orden = $this->service->crearOrden($validated);
 
-        return response()->json($orden, 201);
+        Log::info('Orden creada', ['orden_id' => $orden->id, 'user_id' => Auth::user()->id]);
+
+        return response()->json($orden, Response::HTTP_CREATED);
     }
 
     /**
@@ -41,8 +45,19 @@ class OrdenController extends Controller
     {
         try {
             $orden = $this->service->asignarReparto($orden, $request->reparto_id);
+            
+            Log::info('Asignar reparto', ['orden_id' => $orden->id, 'reparto_id' => $request->reparto_id, 'user_id' => Auth::user()->id]);
+    
             return response()->json($orden, Response::HTTP_OK);
         } catch (\Exception $exception) {
+            Log::error('Error al asignar reparto', [
+                'orden_id'      => $orden->id,
+                'reparto_id'    => $request->reparto_id,
+                'user_id'       => Auth::user()->id,
+                'error'         => $exception->getMessage(),
+                'trace'         => $exception->getTraceAsString()
+            ]);
+
             return response()->json([
                 "message" => $exception->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);

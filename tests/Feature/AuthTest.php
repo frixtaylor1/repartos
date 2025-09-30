@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Services\AuthService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use Mockery;
 use Tests\Support\PersistedTestObjects;
@@ -40,7 +40,7 @@ class AuthTest extends TestCase
             'password'  => 'password123',
         ]);
 
-        $response->assertStatus(200)->assertJson($expectedResponse);
+        $response->assertStatus(Response::HTTP_OK)->assertJson($expectedResponse);
     }
 
     public function test_login_falla_con_credenciales_invalidas()
@@ -58,7 +58,7 @@ class AuthTest extends TestCase
             'password'  => 'wrongpassword',
         ]);
 
-        $response->assertStatus(401)->assertJsonFragment([$expectedResponse]);
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED)->assertJsonFragment([$expectedResponse]);
     }
 
     public function test_logout_elimina_tokens()
@@ -71,7 +71,7 @@ class AuthTest extends TestCase
 
         $response = $this->actingAs($this->user, 'sanctum')->postJson('/api/logout');
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     protected function tearDown(): void

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
@@ -32,7 +33,7 @@ class ClienteTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                         ->postJson('/api/clientes', $data);
 
-        $response->assertStatus(201)
+        $response->assertStatus(Response::HTTP_CREATED)
                  ->assertJsonFragment([
                      'codigo' => 'C1',
                      'email'  => 'cliente@test.com'
@@ -55,7 +56,7 @@ class ClienteTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/clientes', $data);
 
-        $response->assertStatus(422)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->assertJsonValidationErrors(['email']);
     }
 

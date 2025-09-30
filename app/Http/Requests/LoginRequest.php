@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AsignarRepartoRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +22,17 @@ class AsignarRepartoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reparto_id' => 'required|exists:repartos,id',
+            'email'    => 'required|email',
+            'password' => 'required',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'reparto_id.required' => 'El ID del reparto es obligatorio.',
-            'reparto_id.exists'   => 'El reparto especificado no existe.',
+            'email.required'    => 'El email es obligatorio.',
+            'email.email'       => 'El email debe ser válido.',
+            'password.required' => 'La contraseña es obligatoria.',
         ];
     }
 }

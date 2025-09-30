@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
@@ -24,7 +25,7 @@ class RepartoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/repartos', $data);
 
-        $response->assertStatus(201)
+        $response->assertStatus(Response::HTTP_CREATED)
                  ->assertJsonFragment([
                      'codigo_de_reparto' => 'R-101',
                      'vehiculo_id'       => $vehiculo->id,
@@ -47,7 +48,7 @@ class RepartoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/repartos', $data);
 
-        $response->assertStatus(422)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                  ->assertJsonValidationErrors(['vehiculo_id']);
     }
 
@@ -61,7 +62,7 @@ class RepartoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->getJson('/api/repartos/fecha/' . now()->toDateString());
 
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonFragment([
                      'id'            => $reparto->id,
                      'fecha_entrega' => now()->toDateString(),
@@ -76,7 +77,7 @@ class RepartoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->getJson("/api/repartos/fecha/{$fecha}");
 
-        $response->assertStatus(200)
+        $response->assertStatus(Response::HTTP_OK)
                  ->assertJsonCount(0);
     }
 }

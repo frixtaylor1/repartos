@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CrearClienteRequest;
 use App\Services\ClienteService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class ClienteController extends Controller
 {
@@ -22,6 +23,6 @@ class ClienteController extends Controller
     public function crear(CrearClienteRequest $request): JsonResponse
     {
         $cliente = $this->service->crear($request->validated());
-        return response()->json($cliente, 201);
+        return response()->json($cliente, Response::HTTP_CREATED);
     }
 }

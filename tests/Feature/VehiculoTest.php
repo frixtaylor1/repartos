@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Vehiculo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
 
@@ -23,7 +24,7 @@ class VehiculoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/vehiculos', $data);
 
-        $response->assertStatus(201)
+        $response->assertStatus(Response::HTTP_CREATED)
                  ->assertJsonFragment([
                      'patente' => 'ABC123',
                      'modelo'  => 'Ford Fiesta',
@@ -44,7 +45,7 @@ class VehiculoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/vehiculos', $data);
 
-        $response->assertStatus(422)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                  ->assertJsonValidationErrors(['patente']);
     }
 
@@ -60,7 +61,7 @@ class VehiculoTest extends TestCase
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson('/api/vehiculos', $data);
 
-        $response->assertStatus(422)
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                  ->assertJsonValidationErrors(['patente']);
     }
 }

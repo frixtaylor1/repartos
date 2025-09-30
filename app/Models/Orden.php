@@ -11,11 +11,13 @@ class Orden extends Model
     protected $table    = 'ordenes';
     protected $fillable = ['cliente_id', 'fecha_creacion', 'codigo_de_orden', 'reparto_id'];
 
-    public function cliente() {
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 
-    public function reparto() {
+    public function reparto()
+    {
         return $this->belongsTo(Reparto::class);
     }
 }

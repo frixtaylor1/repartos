@@ -11,7 +11,8 @@ class Cliente extends Model
 
     protected $fillable = ['codigo', 'razon_social', 'direccion', 'latitud', 'longitud', 'email'];
 
-    public function ordenes() {
+    public function ordenes()
+    {
         return $this->hasMany(Orden::class);
     }
 }

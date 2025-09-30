@@ -11,7 +11,8 @@ class Vehiculo extends Model
 
     protected $fillable = ['patente', 'modelo'];
 
-    public function repartos() {
+    public function repartos()
+    {
         return $this->hasMany(Reparto::class);
     }
 }

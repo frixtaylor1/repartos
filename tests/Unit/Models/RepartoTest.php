@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Models;
 
-use App\Models\Cliente;
 use App\Models\Orden;
 use App\Models\Reparto;
 use App\Models\Vehiculo;

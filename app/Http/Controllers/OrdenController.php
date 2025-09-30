@@ -42,8 +42,7 @@ class OrdenController extends Controller
         try {
             $orden = $this->service->asignarReparto($orden, $request->reparto_id);
             return response()->json($orden, Response::HTTP_OK);
-        }
-        catch (\Exception $exception) {
+        } catch (\Exception $exception) {
             return response()->json([
                 "message" => $exception->getMessage(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);

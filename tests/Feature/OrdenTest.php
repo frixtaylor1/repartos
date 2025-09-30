@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Reparto;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Support\PersistedTestObjects;
 use Tests\TestCase;
@@ -55,7 +56,7 @@ class OrdenTest extends TestCase
     {
         $user    = PersistedTestObjects::user();
         $orden   = PersistedTestObjects::orden();
-        $reparto = PersistedTestObjects::reparto();
+        $reparto = PersistedTestObjects::reparto(['estado' => Reparto::ESTADO_PENDIENTE]);
 
         $response = $this->actingAs($user, 'sanctum')
                          ->postJson("/api/ordenes/{$orden->id}/reparto", [
@@ -64,7 +65,7 @@ class OrdenTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJsonFragment([
-                     'id' => $orden->id,
+                     'id'         => $orden->id,
                      'reparto_id' => $reparto->id,
                  ]);
         $this->assertDatabaseHas('ordenes', [
